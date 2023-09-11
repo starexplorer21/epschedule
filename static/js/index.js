@@ -256,6 +256,7 @@ function renderToast(text) {
   toast.show();
 }
 // Wait why are we doing this
+// WHAT IS THIS??!??!?!
 function getGpsSuccess(position, roomObj) {
   var radius = 6371000; // Radius of the earth
   var phi1 = position.coords.latitude * (Math.PI / 180);
@@ -326,24 +327,21 @@ function renderRoom(roomObj) {
   // Bug here that causes latitude and longitude of google map tag to not exist
   var popup = document.getElementById("popup");
   var container = document.getElementById("popupContainer");
-  console.log("Latitude = " + roomObj.latitude);
-  console.log("Longitude = " + roomObj.longitude);
+  console.log(roomObj.photo_url)
+  console.log(roomObj)
+  // add searching for room url later.
   container.innerHTML =
-    '<google-map latitude="47.643455" longitude="-122.198935" id="map" zoom="18" disable-default-ui fit-to-markers>' +
-    // '<google-map-marker latitude="' + roomObj.latitude + '" longitude="' + roomObj.longitude + '"' +
-    // 'draggable="false" title="' + roomObj.room + '"></google-map-marker>
-    "</google-map>";
-  /*if (navigator.geolocation) {
-      var success = function(gpsObj) {
-        getGpsSuccess(gpsObj, roomObj);
-      }
-      var fail = function() {
-        getGpsFail();
-      }
-      navigator.geolocation.getCurrentPosition(success, fail);
-  } else {
-      renderToast("Your browser does not support Geolocation");
-  }*/
+    popupContainer.innerHTML = '<div class="teacher" layout vertical>' +
+    '<paper-material class="header" elevation="2" ' + innerHTMLStyle + '>' +
+    "<div layout horizontal center>" +
+    '<img src="' +
+    roomObj.photo_url+
+    "\" onerror=\"if (this.src != '/static/images/placeholder.png') this.src = '/static/images/placeholder.png';\">"
+  // Wait for HTML to be parsed/applied before trying to show the schedule.
+  // Without this, Firefox/Safari don't display the schedule.
+  setTimeout(function () {
+    finishLiteSchedule(document.getElementById("studentschedule"), studentObj);
+  }, 0);
 }
 function renderBio(teacherBio) {
   var html = "";
